@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <style>
+        /* --- General Styles --- */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6; /* Soft background */
+    color: #333;
+    line-height: 1.6;
+}
+
+.about-us-header {
+    background-color: #2c6e49; /* Deep green header */
+    color: #fff;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.about-us-header h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+}
+
+.about-us-header p {
+    font-size: 1.2em;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* --- Team Container --- */
+.team-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 50px 20px;
+    flex-wrap: wrap; /* Allows cards to wrap on smaller screens */
+}
+
+/* --- Team Member Cards --- */
+.team-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 2px solid transparent; /* For the active border effect */
+    cursor: pointer;
+}
+
+.team-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.team-card img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 3px solid #ddd;
+}
+
+.team-card h3 {
+    font-size: 1.5em;
+    margin: 0;
+    color: #4a4a4a;
+}
+
+.team-card .role {
+    color: #2c6e49;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+/* --- Bio Text (Initially Hidden) --- */
+.bio-text {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+    opacity: 0;
+    padding-top: 0;
+}
+
+/* Bio Text revealed on click */
+.team-card.active .bio-text {
+    max-height: 200px; /* Adjust as needed */
+    opacity: 1;
+    padding-top: 15px;
+}
+
+.team-card.active {
+    border-color: #2c6e49;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .team-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .team-card {
+        width: 80%;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <header class="about-us-header">
+        <h1>About Us</h1>
+        <p>We are a dedicated team passionate about empowering farmers through technology. Our mission is to solve the daily challenges faced by the agricultural community with innovative digital solutions.</p>
+    </header>
+
+    <main class="team-container">
+        
+        <div class="team-card" data-role="CEO">
+            <img src="shashi.png" alt="Team Member 1">
+            <h3>Shashidhar Naik Dharavath</h3>
+            <p class="role">Chief Executive Officer</p>
+            <div class="bio-text">
+                <p>Jane is a visionary leader with over 15 years of experience in agritech. She founded the company to bridge the gap between farmers and modern technology.</p>
+            </div>
+        </div>
+
+        <div class="team-card" data-role="CTO">
+            <img src="Ganesh.png" alt="Team Member 2">
+            <h3>Ganesh Vollala</h3>
+            <p class="role">Chief Technology Officer</p>
+            <div class="bio-text">
+                <p>John is the technical backbone of our platform. His expertise in software architecture and data analytics ensures our platform is robust and scalable.</p>
+            </div>
+        </div>
+        
+        <div class="team-card" data-role="Lead Developer">
+            <img src="Ashok.png" alt="Team Member 3">
+            <h3>Ashok Chakali</h3>
+            <p class="role">Logistics Manager</p>
+            <div class="bio-text">
+                <p>Emily leads our development team, specializing in building user-friendly and intuitive interfaces that make our platform easy for farmers to use.</p>
+            </div>
+        </div>
+
+        <div class="team-card" data-role="Marketing Head">
+            <img src="pranav.png" alt="Team Member 4">
+            <h3>Pranav venkat Kundem</h3>
+            <p class="role">Head of Marketing</p>
+            <div class="bio-text">
+                <p>Alex is responsible for connecting our platform with the farming community. He focuses on understanding their needs and communicating our value effectively.</p>
+            </div>
+        </div>
+
+        <div class="team-card" data-role="Agronomy Advisor">
+            <img src="sowmya.png" alt="Team Member 5">
+            <h3>Sowmya Sree Dasaraju</h3>
+            <p class="role">Agronomy Advisor</p>
+            <div class="bio-text">
+                <p>Sowmya is our in-house crop expert. She provides the scientific guidance and data behind our crop and fertilizer recommendations.</p>
+            </div>
+        </div>
+
+        <div class="team-card" data-role="Logistics Manager">
+            <img src="lakshmi.png" alt="Team Member 6">
+            <h3>Sai Lakshmi Prasanna Divi</h3>
+            <p class="role">Lead Developer</p>
+            <div class="bio-text">
+                <p>Sai is our logistics guru, ensuring that our scheduling system is efficient and reduces waiting times at mills, directly saving farmers time and money.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="about-us-script.js">
+        document.addEventListener('DOMContentLoaded', () => {
+    const teamCards = document.querySelectorAll('.team-card');
+
+    teamCards.forEach(card => {
+        card.addEventListener('click', () => {
+            // Remove 'active' class from all cards
+            teamCards.forEach(c => {
+                if (c !== card) {
+                    c.classList.remove('active');
+                }
+            });
+            // Toggle 'active' class on the clicked card
+            card.classList.toggle('active');
+        });
+    });
+});
+    </script>
+</body>
+</html>

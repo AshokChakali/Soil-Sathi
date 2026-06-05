@@ -1,0 +1,537 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <div id="BookingPage">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmer Slot Booking</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="description" content="Simple, responsive Farmer Slot Booking UI">
+  <style>
+  :root {
+    --bg: #070b0c;
+    --panel: #111a1d;
+    --text: #f0f9ff;
+    --muted: #94a3b8;
+    --primary: #22d3ee;
+    --primary-600: #06b6d4;
+    --primary-700: #0891b2;
+    --accent: #10b981;
+    --border: #1e293b;
+    --shadow: rgba(0, 0, 0, 0.35);
+    --bg-cyan: rgba(34, 211, 238, 0.12);
+    --bg-green: rgba(16, 185, 129, 0.10);
+    --bg-blue: rgba(37, 99, 235, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(1100px 600px at 5% -10%, var(--bg-cyan), transparent 55%),
+      radial-gradient(900px 500px at 110% 0%, var(--bg-green), transparent 55%),
+      conic-gradient(from 210deg at 120% -10%, rgba(6,182,212,0.10), transparent 25%),
+      var(--bg);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Decorative, unique background layers */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -10% -10% auto -10%;
+    height: 55vh;
+    z-index: -2;
+    background:
+      radial-gradient(220px 220px at 12% 30%, rgba(34,211,238,0.22), transparent 60%),
+      radial-gradient(260px 200px at 85% 15%, rgba(16,185,129,0.18), transparent 60%),
+      radial-gradient(200px 200px at 55% 70%, rgba(59,130,246,0.14), transparent 60%);
+    filter: blur(30px) saturate(110%);
+    pointer-events: none;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: radial-gradient(1200px 800px at 50% 20%, black 40%, transparent 75%);
+    opacity: 0.6;
+  }
+
+  @keyframes floatBlobs {
+    0% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-10px) translateX(6px); }
+    100% { transform: translateY(0) translateX(0); }
+  }
+
+  .app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(17, 26, 29, 0.8);
+    backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 4px 20px var(--shadow);
+  }
+
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .brand-logo { width: 42px; height: 42px; border-radius: 10px; background: linear-gradient(135deg, var(--primary), var(--accent)); border: 1px solid var(--border); }
+  .brand h1 { font-size: 22px; margin: 0; }
+  .subtitle { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+
+  .container { max-width: 900px; margin: 32px auto; padding: 0 16px; }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 32px var(--shadow); }
+  .panel-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 14px; }
+  .panel-header h2 { margin: 0; font-size: 22px; }
+
+  .grid-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 20px; }
+  .form-field { display: flex; flex-direction: column; gap: 6px; position: relative; }
+  .form-field label { color: var(--muted); font-size: 13px; }
+  .form-field input, .form-field select { background: #0a1114; color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 12px 12px; }
+  .inline-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mini-field { display: flex; flex-direction: column; gap: 6px; }
+  .mini-field label { color: var(--muted); font-size: 12px; }
+  .form-actions { display: flex; gap: 10px; grid-column: span 2; }
+
+  .btn { background: rgba(30, 41, 59, 0.8); color: var(--text); border: 1px solid var(--border); padding: 14px 20px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 15px; }
+  .btn.primary { background: linear-gradient(135deg, var(--primary-600), var(--primary-700)); border: none; color: white; }
+  /* Make Register button larger specifically */
+  #bookingForm .btn.primary { padding: 16px 28px; font-size: 16px; border-radius: 14px; }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; }
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th, .data-table td { border-bottom: 1px solid var(--border); padding: 12px; text-align: left; font-size: 14px; }
+  .data-table th { color: var(--muted); text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
+  .data-table tr:hover td { background: rgba(34, 211, 238, 0.06); }
+  .status-scheduled { font-weight: bold; color: var(--accent); }
+
+  .app-footer { text-align: center; color: var(--muted); padding: 28px 12px 44px; }
+  /* Live preview */
+  .preview { 
+    margin-top: 12px; 
+    padding: 12px; 
+    border: 1px dashed var(--border); 
+    border-radius: 10px; 
+    color: var(--text); 
+    background: rgba(34,211,238,0.05);
+  }
+  .preview.hidden { display: none; }
+
+  @media (max-width: 720px) {
+    .grid-form { grid-template-columns: 1fr; }
+    .form-actions { grid-column: span 1; }
+    #bookingForm .btn.primary { width: 100%; }
+  }
+
+  /* Autocomplete suggestions */
+  .suggestions { 
+    position: absolute; 
+    left: 0; 
+    right: 0; 
+    top: calc(100% + 6px);
+    background: rgba(17, 26, 29, 0.95); 
+    border: 1px solid var(--border); 
+    border-radius: 12px; 
+    z-index: 20; 
+    box-shadow: 0 8px 32px var(--shadow); 
+    max-height: 240px; 
+    overflow: auto;
+  }
+  .suggestions.hidden { display: none; }
+  .suggestion-item { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .suggestion-item:last-child { border-bottom: none; }
+  .suggestion-item:hover, .suggestion-item.active { background: rgba(34, 211, 238, 0.1); }
+  .suggestion-title { color: var(--text); font-size: 14px; font-weight: 500; }
+  .suggestion-sub { color: var(--muted); font-size: 12px; }
+</style>
+
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-logo" aria-hidden="true"></div>
+      <div>
+        <h1>Farmer Slot Booking</h1>
+        <p class="subtitle">Register slots and track bookings</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Register Slot</h2>
+      </div>
+      <form id="bookingForm" class="grid-form" autocomplete="off">
+        <div class="form-field">
+          <label for="cropType">Crop Type</label>
+          <select id="cropType" required>
+            <option value="">Select crop</option>
+            <option>Wheat</option>
+            <option>Rice</option>
+            <option>Maize</option>
+            <option>Soybean</option>
+            <option>Sugarcane</option>
+            <option>Cotton</option>
+            <option>Pulses</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="farmerName">Farmer Name</label>
+          <input id="farmerName" type="text" placeholder="Enter full name" required>
+        </div>
+
+        <div class="form-field">
+          <label for="phoneNumber">Phone Number</label>
+          <input id="phoneNumber" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10-digit number" required>
+        </div>
+
+        <div class="form-field">
+          <label for="aadhaarNumber">Aadhaar Number</label>
+          <input id="aadhaarNumber" type="text" inputmode="numeric" pattern="[0-9]{12}" maxlength="12" placeholder="12-digit Aadhaar" required>
+        </div>
+
+        <div class="form-field">
+          <label for="farmerLocation">Farmer Location</label>
+          <input id="farmerLocation" type="text" placeholder="Village / City" required autocomplete="off">
+          <div id="farmerSuggestions" class="suggestions hidden"></div>
+          <div class="inline-fields">
+            <div class="mini-field">
+              <label for="farmerLat">Latitude</label>
+              <input id="farmerLat" type="number" step="0.000001" placeholder="Lat (auto)" readonly>
+            </div>
+            <div class="mini-field">
+              <label for="farmerLon">Longitude</label>
+              <input id="farmerLon" type="number" step="0.000001" placeholder="Lon (auto)" readonly>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="millLocation">Mill Location</label>
+          <input id="millLocation" type="text" placeholder="Mill City / Address" required autocomplete="off">
+          <div id="millSuggestions" class="suggestions hidden"></div>
+          <div class="inline-fields">
+            <div class="mini-field">
+              <label for="millLat">Latitude</label>
+              <input id="millLat" type="number" step="0.000001" placeholder="Lat (auto)" readonly>
+            </div>
+            <div class="mini-field">
+              <label for="millLon">Longitude</label>
+              <input id="millLon" type="number" step="0.000001" placeholder="Lon (auto)" readonly>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions col-span-2">
+          <button type="submit" class="btn primary">Register</button>
+          <button type="reset" class="btn" id="clearBtn">Clear</button>
+        </div>
+      </form>
+      <div id="distancePreview" class="preview hidden" aria-live="polite"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Bookings</h2>
+        <button id="exportBtn" class="btn">Export Bookings</button>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table" id="bookingsTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Crop</th>
+              <th>Farmer</th>
+              <th>Phone</th>
+              <th>Farmer Location</th>
+              <th>Mill Location</th>
+              <th>Distance (km)</th>
+              <th>Avg. Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>© <span id="year"></span> Farmer Slot Booking. Demo UI.</p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    // Set footer year
+    (function () {
+      'use strict';
+
+      const form = document.getElementById('bookingForm');
+      const tableBody = document.querySelector('#bookingsTable tbody');
+      const farmerInput = document.getElementById('farmerLocation');
+      const millInput = document.getElementById('millLocation');
+      const farmerSug = document.getElementById('farmerSuggestions');
+      const millSug = document.getElementById('millSuggestions');
+      const farmerLatEl = document.getElementById('farmerLat');
+      const farmerLonEl = document.getElementById('farmerLon');
+      const millLatEl = document.getElementById('millLat');
+      const millLonEl = document.getElementById('millLon');
+      const preview = document.getElementById('distancePreview');
+      const exportBtn = document.getElementById('exportBtn');
+      let bookingCount = 0;
+
+      function randomDistanceKm() {
+        return (Math.random() * 245 + 5).toFixed(1);
+      }
+      
+      function calculateAverageTime(distanceKm) {
+        const speedKmh = 30;
+        const timeHours = distanceKm / speedKmh;
+        const hours = Math.floor(timeHours);
+        const minutes = Math.round((timeHours - hours) * 60);
+        
+        if (hours === 0) {
+          return `${minutes} min`;
+        }
+        return `${hours} hr ${minutes} min`;
+      }
+
+      function haversineKm(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = ((lat2 - lat1) * Math.PI) / 180;
+        const dLon = ((lon2 - lon1) * Math.PI) / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos((lat1*Math.PI)/180) * Math.cos((lat2*Math.PI)/180) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+      }
+
+      const geocodeCache = new Map();
+      const searchCache = new Map();
+      const CACHE_TTL = 5 * 60 * 1000;
+      function getCached(cache, key) {
+        const v = cache.get(key);
+        if (v && Date.now() - v.t < CACHE_TTL) return v.d;
+        cache.delete(key); return null;
+      }
+      function setCached(cache, key, data) { cache.set(key, { d: data, t: Date.now() }); }
+
+      async function searchPlaces(q) {
+        const key = q.trim().toLowerCase();
+        if (!key) return [];
+        const cached = getCached(searchCache, key); if (cached) return cached;
+        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(key)}&format=json&addressdetails=1&limit=5&countrycodes=in`;
+        try {
+          const res = await fetch(url, { headers: { 'Accept': 'application/json', 'User-Agent': 'FarmerSlotBooking/1.0' }});
+          if (!res.ok) return [];
+          const arr = await res.json();
+          const out = Array.isArray(arr) ? arr.map((r) => ({
+            title: r.display_name,
+            lat: Number(r.lat),
+            lon: Number(r.lon)
+          })) : [];
+          setCached(searchCache, key, out);
+          return out;
+        } catch { return []; }
+      }
+
+      function renderSuggestions(container, items) {
+        if (!container) return;
+        if (!items || items.length === 0) { container.classList.add('hidden'); container.innerHTML = ''; return; }
+        container.innerHTML = items.map((it, idx) => `
+          <div class="suggestion-item" data-idx="${idx}">
+            <div class="suggestion-title">${it.title}</div>
+            <div class="suggestion-sub">${it.lat.toFixed(5)}, ${it.lon.toFixed(5)}</div>
+          </div>`).join('');
+        container.classList.remove('hidden');
+      }
+
+      function debounce(fn, delay) { let t=null; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), delay); } }
+
+      function attachAutocomplete(nameEl, latEl, lonEl, sugEl) {
+        if (!nameEl || !latEl || !lonEl || !sugEl) return;
+        const doSearch = debounce(async () => {
+          const q = nameEl.value.trim();
+          if (!q) { renderSuggestions(sugEl, []); return; }
+          sugEl.innerHTML = '<div class="suggestion-item"><div class="suggestion-title">Searching...</div></div>';
+          sugEl.classList.remove('hidden');
+          const results = await searchPlaces(q);
+          renderSuggestions(sugEl, results);
+        }, 200);
+        nameEl.addEventListener('input', doSearch);
+        nameEl.addEventListener('focus', doSearch);
+        nameEl.addEventListener('blur', async () => {
+          setTimeout(async () => {
+            renderSuggestions(sugEl, []);
+            const hasCoords = latEl.value && lonEl.value;
+            const q = nameEl.value.trim();
+            if (!hasCoords && q) {
+              const results = await searchPlaces(q);
+              if (results && results.length > 0) {
+                latEl.value = String(results[0].lat.toFixed(6));
+                lonEl.value = String(results[0].lon.toFixed(6));
+                updatePreview();
+              }
+            } else {
+              updatePreview();
+            }
+          }, 120);
+        });
+        sugEl.addEventListener('click', (e) => {
+          const it = e.target.closest('.suggestion-item');
+          if (!it) return;
+          const sub = it.querySelector('.suggestion-sub');
+          const title = it.querySelector('.suggestion-title');
+          if (!sub || !title) return;
+          const [latStr, lonStr] = sub.textContent.split(',');
+          const lat = Number(latStr);
+          const lon = Number(lonStr);
+          nameEl.value = title.textContent;
+          if (Number.isFinite(lat) && Number.isFinite(lon)) {
+            latEl.value = String(lat.toFixed(6));
+            lonEl.value = String(lon.toFixed(6));
+          }
+          renderSuggestions(sugEl, []);
+          updatePreview();
+        });
+      }
+
+      function updatePreview() {
+        if (!preview) return;
+        const flt = Number(farmerLatEl.value);
+        const fln = Number(farmerLonEl.value);
+        const mlt = Number(millLatEl.value);
+        const mln = Number(millLonEl.value);
+        const have = Number.isFinite(flt) && Number.isFinite(fln) && Number.isFinite(mlt) && Number.isFinite(mln);
+        if (!have) { preview.classList.add('hidden'); preview.textContent = ''; return; }
+        const km = haversineKm(flt, fln, mlt, mln);
+        const avgTime = calculateAverageTime(km);
+        preview.textContent = `Distance: ${km.toFixed(1)} km | Avg. Time: ${avgTime} | Farmer: ${flt.toFixed(4)}, ${fln.toFixed(4)} | Mill: ${mlt.toFixed(4)}, ${mln.toFixed(4)}`;
+        preview.classList.remove('hidden');
+      }
+
+      function generateId() {
+        bookingCount++;
+        return `B-${bookingCount}`;
+      }
+
+      function appendRow(booking) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${booking.id}</td>
+          <td>${booking.crop}</td>
+          <td>${booking.farmer}</td>
+          <td>${booking.phone}</td>
+          <td>${booking.farmerLoc}</td>
+          <td>${booking.millLoc}</td>
+          <td>${booking.distanceKm}</td>
+          <td>${booking.avgTime}</td>
+          <td><span class="status-scheduled">${booking.status}</span></td>
+        `;
+        tableBody.appendChild(tr);
+      }
+
+      function exportBookings() {
+        const table = document.getElementById('bookingsTable');
+        const rows = table.querySelectorAll('tr');
+        let exportContent = '--- BOOKINGS ---\n\n';
+
+        for (let i = 1; i < rows.length; i++) {
+          const cells = rows[i].querySelectorAll('td');
+          exportContent += `Booking #${i}\n`;
+          exportContent += `ID: ${cells[0].innerText.trim()}\n`;
+          exportContent += `Crop: ${cells[1].innerText.trim()}\n`;
+          exportContent += `Farmer: ${cells[2].innerText.trim()}\n`;
+          exportContent += `Phone: ${cells[3].innerText.trim()}\n`;
+          exportContent += `Farmer Location: ${cells[4].innerText.trim()}\n`;
+          exportContent += `Mill Location: ${cells[5].innerText.trim()}\n`;
+          exportContent += `Distance (km): ${cells[6].innerText.trim()}\n`;
+          exportContent += `Avg. Time: ${cells[7].innerText.trim()}\n`;
+          exportContent += `Status: ${cells[8].innerText.trim()}\n`;
+          exportContent += '------------------------\n\n';
+        }
+        
+        const blob = new Blob([exportContent], { type: 'text/plain;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'bookings.txt';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+
+      attachAutocomplete(farmerInput, farmerLatEl, farmerLonEl, farmerSug);
+      attachAutocomplete(millInput, millLatEl, millLonEl, millSug);
+      farmerInput.addEventListener('blur', () => setTimeout(updatePreview, 150));
+      millInput.addEventListener('blur', () => setTimeout(updatePreview, 150));
+      
+      exportBtn.addEventListener('click', exportBookings);
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const crop = document.getElementById('cropType').value.trim();
+        const farmer = document.getElementById('farmerName').value.trim();
+        const phone = document.getElementById('phoneNumber').value.trim();
+        const aadhaar = document.getElementById('aadhaarNumber').value.trim();
+        const farmerLoc = document.getElementById('farmerLocation').value.trim();
+        const millLoc = document.getElementById('millLocation').value.trim();
+        const farmerLat = Number(farmerLatEl.value);
+        const farmerLon = Number(farmerLonEl.value);
+        const millLat = Number(millLatEl.value);
+        const millLon = Number(millLonEl.value);
+
+        if (!crop || !farmer || !phone || !aadhaar || !farmerLoc || !millLoc) return;
+
+        const distanceKm = (Number.isFinite(farmerLat) && Number.isFinite(farmerLon) && Number.isFinite(millLat) && Number.isFinite(millLon))
+          ? haversineKm(farmerLat, farmerLon, millLat, millLon).toFixed(1)
+          : randomDistanceKm();
+        
+        const avgTime = calculateAverageTime(distanceKm);
+
+        const booking = {
+          id: generateId(),
+          crop,
+          farmer,
+          phone,
+          farmerLoc,
+          millLoc,
+          distanceKm,
+          avgTime,
+          status: 'Scheduled'
+        };
+
+        alert('Your slot is booked successfully');
+        appendRow(booking);
+        form.reset();
+        updatePreview();
+      });
+
+    })();
+
+    document.getElementById('year').textContent = String(new Date().getFullYear());
+  </script>
+  </div>
+</body>
+</html>

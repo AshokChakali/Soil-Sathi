@@ -1,0 +1,961 @@
+
+  
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Agri Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Smart Agri Platform with Farm-to-Mill logistics.">
+    <style>
+    :root {
+      --bg: #070b0c;
+      --panel: #111a1d;
+      --text: #f0f9ff;
+      --muted: #94a3b8;
+      --primary: #22d3ee;
+      --primary-600: #06b6d4;
+      --primary-700: #0891b2;
+      --accent: #10b981;
+      --border: #1e293b;
+      --shadow: rgba(0, 0, 0, 0.35);
+      --bg-cyan: rgba(34, 211, 238, 0.12);
+      --bg-green: rgba(16, 185, 129, 0.10);
+      --bg-blue: rgba(37, 99, 235, 0.08);
+    }
+  
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1100px 600px at 5% -10%, var(--bg-cyan), transparent 55%),
+        radial-gradient(900px 500px at 110% 0%, var(--bg-green), transparent 55%),
+        conic-gradient(from 210deg at 120% -10%, rgba(6,182,212,0.10), transparent 25%),
+        var(--bg);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+  
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -10% -10% auto -10%;
+      height: 55vh;
+      z-index: -2;
+      background:
+        radial-gradient(220px 220px at 12% 30%, rgba(34,211,238,0.22), transparent 60%),
+        radial-gradient(260px 200px at 85% 15%, rgba(16,185,129,0.18), transparent 60%),
+        radial-gradient(200px 200px at 55% 70%, rgba(59,130,246,0.14), transparent 60%);
+      filter: blur(30px) saturate(110%);
+      pointer-events: none;
+    }
+  
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 22px 22px;
+      mask-image: radial-gradient(1200px 800px at 50% 20%, black 40%, transparent 75%);
+      opacity: 0.6;
+    }
+  
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(17, 26, 29, 0.8);
+      backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+  
+    .brand { display: flex; align-items: center; gap: 16px; }
+    .brand-logo { width: 42px; height: 42px; border-radius: 10px; background: linear-gradient(135deg, var(--primary), var(--accent)); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: white; }
+    .brand-logo svg { width: 24px; height: 24px; }
+    .brand h1 { font-size: 22px; margin: 0; }
+    .subtitle { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+  
+    .tabs { display: flex; gap: 8px; }
+    .tab {
+      display: flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 12px;
+      background: transparent; border: 1px solid transparent; color: var(--muted); cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+    .tab:hover { background: rgba(30, 41, 59, 0.4); color: var(--text); border-color: var(--border); }
+    .tab.active { background: rgba(34,211,238,0.12); color: var(--primary); border-color: rgba(34,211,238,0.3); font-weight: 500; }
+    .tab.active:hover { background: rgba(34,211,238,0.15); }
+    .tab svg { color: inherit; }
+  
+    .container { max-width: 1100px; margin: 32px auto; padding: 0 16px; }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 32px var(--shadow); }
+    .panel-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 14px; flex-wrap: wrap; }
+    .header-content h2 { margin: 0 0 4px; font-size: 22px; display: flex; align-items: center; gap: 12px; }
+    .header-content .panel-description { margin: 0; font-size: 14px; color: var(--muted); }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  
+    .grid-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 20px; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; position: relative; }
+    .form-field label { color: var(--muted); font-size: 13px; }
+    .form-field input, .form-field select { background: #0a1114; color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 12px 12px; }
+    .form-field input { width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .inline-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .location-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 20px; grid-column: span 3; align-items: start; }
+    .form-actions { display: flex; gap: 10px; grid-column: span 3; }
+  
+    .btn {
+      background: rgba(30, 41, 59, 0.8); color: var(--text); border: 1px solid var(--border);
+      padding: 14px 20px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 15px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn.primary { background: linear-gradient(135deg, var(--primary-600), var(--primary-700)); border: none; color: white; }
+    .btn:hover { background: rgba(30, 41, 59, 1); }
+    .btn.primary:hover { opacity: 0.9; }
+  
+    .file-input { cursor: pointer; }
+    .file-input input { display: none; }
+  
+    .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; }
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th, .data-table td { border-bottom: 1px solid var(--border); padding: 12px; text-align: left; font-size: 14px; }
+    .data-table th { color: var(--muted); text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: rgba(34, 211, 238, 0.06); }
+    .status-badge {
+      padding: 4px 8px; border-radius: 8px; font-size: 12px; font-weight: 500;
+    }
+    .status-pending { background-color: var(--bg-blue); color: #3b82f6; }
+    .status-assigned { background-color: var(--bg-cyan); color: #06b6d4; }
+    .status-in-transit { background-color: var(--bg-green); color: var(--accent); }
+    .status-delivered { background-color: rgba(34,197,94,0.1); color: #22c55e; }
+    .status-cancelled { background-color: rgba(239,68,68,0.1); color: #ef4444; }
+  
+    .action-btn { background: none; border: none; cursor: pointer; padding: 4px 8px; color: var(--muted); transition: color 0.2s; }
+    .action-btn:hover { color: var(--text); }
+    .action-btn.delete:hover { color: #ef4444; }
+    .action-btn.edit:hover { color: var(--primary); }
+  
+    .app-footer { text-align: center; color: var(--muted); padding: 28px 12px 44px; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .result-message { margin-top: 15px; padding: 15px; border-radius: 12px; font-size: 15px; }
+    .result-message.success { background: var(--bg-green); border: 1px solid var(--accent); color: var(--accent); }
+    .result-message.error { background: rgba(239,68,68,0.1); border: 1px solid #ef4444; color: #ef4444; }
+  
+    /* Autocomplete suggestions */
+    .suggestions {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 6px);
+      background: rgba(17, 26, 29, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      z-index: 20;
+      box-shadow: 0 8px 32px var(--shadow);
+      max-height: 240px;
+      overflow: auto;
+    }
+    .suggestions.hidden { display: none; }
+    .suggestion-item { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .suggestion-item:last-child { border-bottom: none; }
+    .suggestion-item:hover, .suggestion-item.active { background: rgba(34, 211, 238, 0.1); }
+    .suggestion-title { color: var(--text); font-size: 14px; font-weight: 500; }
+    .suggestion-sub { color: var(--muted); font-size: 12px; }
+    .row-flash { animation: rowFlash 1.6s ease-out; }
+    @keyframes rowFlash { 0% { background-color: rgba(34,211,238,0.25); } 100% { background-color: transparent; } }
+  
+    @media (max-width: 900px) {
+      .grid-form { grid-template-columns: 1fr; }
+      .form-actions { grid-column: span 1; }
+      .header-content, .actions { flex-basis: 100%; }
+      .data-table th, .data-table td { min-width: 100px; }
+      .location-row { grid-template-columns: 1fr; grid-column: span 1; }
+    }
+  </style>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+            <path d="M19 15L20.09 18.26L23 19L20.09 19.74L19 23L17.91 19.74L15 19L17.91 18.26L19 15Z" fill="currentColor"/>
+            <path d="M5 15L6.09 18.26L9 19L6.09 19.74L5 23L3.91 19.74L1 19L3.91 18.26L5 15Z" fill="currentColor"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Smart Agri Platform</h1>
+          <p class="subtitle">Farm-to-Mill Logistics</p>
+        </div>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="Main sections">
+        <button class="tab active" data-tab="logistics" role="tab" aria-selected="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 8H4V6H20V8ZM4 13H20V11H4V13ZM4 18H20V16H4V18Z" fill="currentColor"/>
+          </svg>
+          Logistics
+        </button>
+      </nav>
+    </header>
+  
+    <main class="container">
+      <section id="logistics" class="tab-panel active" role="tabpanel" aria-labelledby="logistics-tab">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="header-content">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 8H4V6H20V8ZM4 13H20V11H4V13ZM4 18H20V16H4V18Z" fill="currentColor"/>
+                </svg>
+                Farm-to-Mill Consignments
+              </h2>
+              <p class="panel-description">Manage your agricultural logistics and track shipments from farm to mill</p>
+            </div>
+            <div class="actions">
+              <button id="newConsignmentBtn" class="btn primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                New Consignment
+              </button>
+              <button id="exportConsignmentsBtn" class="btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M17 10L12 15M12 15L7 10M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Export CSV
+              </button>
+              <label class="file-input btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Import CSV
+                <input id="importConsignmentsInput" type="file" accept=".csv,text/csv" style="display: none;">
+              </label>
+            </div>
+          </div>
+  
+          <div class="table-wrap">
+            <table class="data-table" id="consignmentsTable">
+              <thead>
+                <tr>
+                  <th>Consignment ID</th>
+                  <th>Aadhaar No.</th>
+                  <th>Vehicle No.</th>
+                  <th>Crop</th>
+                  <th>Farm</th>
+                  <th>Mill</th>
+                  <th>Qty (tonnes)</th>
+                  <th>Price/Ton</th>
+                  <th>Total Price</th>
+                  <th>Distance (km)</th>
+                  <th>ETA</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+  
+        <div class="panel">
+          <div class="panel-header">
+            <div class="header-content">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/24/24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 11L12 14L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M21 12V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Completed Consignments
+              </h2>
+              <p class="panel-description">All consignments marked verified are listed here</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="completedTable">
+              <thead>
+                <tr>
+                  <th>Consignment ID</th>
+                  <th>Aadhaar No.</th>
+                  <th>Vehicle No.</th>
+                  <th>Crop</th>
+                  <th>Farm</th>
+                  <th>Mill</th>
+                  <th>Qty (tonnes)</th>
+                  <th>Price/Ton</th>
+                  <th>Total Price</th>
+                  <th>Distance (km)</th>
+                  <th>ETA</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+  
+        <div class="panel" id="consignmentFormPanel">
+          <h3>Create / Edit Consignment</h3>
+          <form id="consignmentForm" class="grid-form" autocomplete="off">
+            <input type="hidden" id="consignmentId">
+  
+            <div class="form-field">
+              <label for="aadhaarNumber">Aadhaar No.</label>
+              <input id="aadhaarNumber" type="text" inputmode="numeric" pattern="[0-9]{12}" maxlength="12" placeholder="12-digit Aadhaar" required>
+            </div>
+  
+            <div class="form-field">
+              <label for="vehicleNumber">Vehicle No.</label>
+              <input id="vehicleNumber" type="text" placeholder="e.g., MH 12 AB 3456" required>
+            </div>
+  
+            <div class="form-field">
+              <label for="crop">Crop</label>
+              <select id="crop" required>
+                <option value="">Select crop</option>
+                <option>Wheat</option>
+                <option>Rice</option>
+                <option>Maize</option>
+                <option>Soybean</option>
+                <option>Sugarcane</option>
+                <option>Cotton</option>
+                <option>Pulses</option>
+              </select>
+            </div>
+            
+            <div class="form-field">
+              <label for="beforeDeliveryTons">Before Delivery Weight (Tons)</label>
+              <input id="beforeDeliveryTons" type="number" min="0" step="0.01" placeholder="e.g., 12.5" required>
+            </div>
+            
+            <div class="form-field">
+              <label for="afterDeliveryTons">After Delivery Weight (Tons)</label>
+              <input id="afterDeliveryTons" type="number" min="0" step="0.01" placeholder="e.g., 12.0" required>
+            </div>
+  
+            <div class="form-field">
+              <label for="totalTons">Total Quantity (Tons)</label>
+              <input id="totalTons" type="text" placeholder="Auto-calculated" readonly>
+            </div>
+  
+            <div class="form-field">
+              <label for="pricePerTon">Price Per Ton</label>
+              <input id="pricePerTon" type="number" min="0" step="0.01" placeholder="e.g., 2500" required>
+            </div>
+            
+            <div class="form-field">
+              <label for="totalPrice">Total Price</label>
+              <input id="totalPrice" type="text" placeholder="Auto-calculated" readonly>
+            </div>
+  
+            <div class="form-field">
+              <label for="vehicleSpeed">Avg Vehicle Speed (km/h)</label>
+              <input id="vehicleSpeed" type="number" min="1" step="1" value="40" required>
+            </div>
+  
+            <div class="location-row">
+              <div class="form-field">
+                <label for="farmLocationName">Farm Location (name)</label>
+                <input id="farmLocationName" type="text" placeholder="e.g., Hyderabad" required autocomplete="off">
+                <div id="farmSuggestions" class="suggestions hidden"></div>
+                <div class="inline-fields">
+                  <input id="farmLat" type="number" step="0.000001" placeholder="Lat (auto)" readonly required>
+                  <input id="farmLon" type="number" step="0.000001" placeholder="Lon (auto)" readonly required>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="millLocationName">Mill Location (name)</label>
+                <input id="millLocationName" type="text" placeholder="Search for a mill..." required autocomplete="off">
+                <div id="millSuggestions" class="suggestions hidden"></div>
+                <div class="inline-fields">
+                  <input id="millLat" type="number" step="0.000001" placeholder="Lat (auto)" readonly required>
+                  <input id="millLon" type="number" step="0.000001" placeholder="Lon (auto)" readonly required>
+                </div>
+              </div>
+            </div>
+            <div id="distanceInfo" class="panel-description" style="grid-column: span 3;"></div>
+  
+            <div class="form-field">
+              <label for="status">Status</label>
+              <select id="status" required>
+                <option>Pending</option>
+                <option>Assigned</option>
+                <option>In Transit</option>
+                <option>Delivered</option>
+                <option>Cancelled</option>
+              </select>
+            </div>
+  
+            <div class="form-actions col-span-3">
+              <button type="submit" class="btn primary">Save Consignment</button>
+              <button type="reset" class="btn" id="resetFormBtn">Clear</button>
+            </div>
+          </form>
+  
+          <details class="hint">
+            <summary>How location autofill works</summary>
+            <p>Enter a city, village, or address. Latitude/longitude will auto-fill using OpenStreetMap.</p>
+          </details>
+  
+          <div id="resultMessage" class="result-message" aria-live="polite"></div>
+        </div>
+      </section>
+    </main>
+  
+    <footer class="app-footer">
+      <p>© <span id="year"></span> Smart Agri Platform. Local, offline demo. Data stored in your browser.</p>
+    </footer>
+  
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        'use strict';
+        
+        // --- Core UI Variables ---
+        const tabs = document.querySelectorAll('.tab');
+        const panels = document.querySelectorAll('.tab-panel');
+        const yearEl = document.getElementById('year');
+        yearEl.textContent = new Date().getFullYear();
+  
+        // --- Logistics Section Variables ---
+        const newConsignmentBtn = document.getElementById('newConsignmentBtn');
+        const exportConsignmentsBtn = document.getElementById('exportConsignmentsBtn');
+        const importConsignmentsInput = document.getElementById('importConsignmentsInput');
+        const consignmentsTableBody = document.querySelector('#consignmentsTable tbody');
+        const completedTableBody = document.querySelector('#completedTable tbody');
+        const consignmentForm = document.getElementById('consignmentForm');
+        const consignmentFormPanel = document.getElementById('consignmentFormPanel');
+        const consignmentIdInput = document.getElementById('consignmentId');
+        const farmLocationNameInput = document.getElementById('farmLocationName');
+        const millLocationNameInput = document.getElementById('millLocationName');
+        const farmSuggestions = document.getElementById('farmSuggestions');
+        const millSuggestions = document.getElementById('millSuggestions');
+        const farmLatInput = document.getElementById('farmLat');
+        const farmLonInput = document.getElementById('farmLon');
+        const millLatInput = document.getElementById('millLat');
+        const millLonInput = document.getElementById('millLon');
+        const beforeDeliveryTonsInput = document.getElementById('beforeDeliveryTons');
+        const afterDeliveryTonsInput = document.getElementById('afterDeliveryTons');
+        const totalTonsInput = document.getElementById('totalTons');
+        const pricePerTonInput = document.getElementById('pricePerTon');
+        const totalPriceInput = document.getElementById('totalPrice');
+        const resultMessage = document.getElementById('resultMessage');
+  
+        const millsData = [
+          { name: 'Shree Renuka Sugars Ltd', lat: 15.65, lon: 74.5 },
+          { name: 'Bajaj Hindusthan Sugar Ltd', lat: 28.53, lon: 77.21 },
+          { name: 'Balrampur Chini Mills Ltd', lat: 27.53, lon: 82.2 },
+          { name: 'EID Parry India Ltd', lat: 13.08, lon: 80.27 },
+          { name: 'Dwarikesh Sugar Industries Ltd', lat: 28.8, lon: 78.4 },
+          { name: 'Triveni Engineering & Industries Ltd', lat: 28.62, lon: 77.06 }
+        ];
+  
+        let consignments = JSON.parse(localStorage.getItem('consignments')) || [];
+        
+        // --- Helper Functions ---
+        function showMessage(type, message) {
+          resultMessage.className = `result-message ${type}`;
+          resultMessage.textContent = message;
+        }
+        
+        function clearMessage() {
+          resultMessage.textContent = '';
+          resultMessage.className = 'result-message';
+        }
+  
+        function haversineKm(lat1, lon1, lat2, lon2) {
+          const R = 6371;
+          const dLat = (lat2 - lat1) * Math.PI / 180;
+          const dLon = (lon2 - lon1) * Math.PI / 180;
+          const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+          return R * c;
+        }
+
+        function updateDistanceInfo() {
+          const infoEl = document.getElementById('distanceInfo');
+          const flt = parseFloat(farmLatInput.value);
+          const fln = parseFloat(farmLonInput.value);
+          const mlt = parseFloat(millLatInput.value);
+          const mln = parseFloat(millLonInput.value);
+          if ([flt, fln, mlt, mln].every(Number.isFinite)) {
+            const dist = haversineKm(flt, fln, mlt, mln);
+            const speed = parseFloat(document.getElementById('vehicleSpeed').value);
+            const eta = calculateETA(dist, speed);
+            infoEl.textContent = `Distance: ${dist.toFixed(1)} km • ETA: ${eta}`;
+          } else {
+            infoEl.textContent = '';
+          }
+        }
+  
+        function calculateETA(distanceKm, speedKmh) {
+          if (!speedKmh || speedKmh <= 0) return 'N/A';
+          const timeHours = distanceKm / speedKmh;
+          const hours = Math.floor(timeHours);
+          const minutes = Math.round((timeHours - hours) * 60);
+          return hours > 0 ? `${hours} hr ${minutes} min` : `${minutes} min`;
+        }
+  
+        const searchCache = new Map();
+        const CACHE_TTL = 5 * 60 * 1000;
+        function getCached(cache, key) {
+          const v = cache.get(key);
+          if (v && Date.now() - v.t < CACHE_TTL) return v.d;
+          cache.delete(key);
+          return null;
+        }
+        function setCached(cache, key, data) { cache.set(key, { d: data, t: Date.now() }); }
+  
+        async function searchPlaces(q) {
+          const key = q.trim().toLowerCase();
+          if (!key) return [];
+          const cached = getCached(searchCache, key); if (cached) return cached;
+          const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(key)}&format=json&addressdetails=1&limit=5&countrycodes=in`;
+          try {
+            const res = await fetch(url, { headers: { 'Accept': 'application/json', 'User-Agent': 'SmartAgriPlatform/1.0' }});
+            if (!res.ok) return [];
+            const arr = await res.json();
+            const out = Array.isArray(arr) ? arr.map(r => ({
+              title: r.display_name,
+              lat: Number(r.lat),
+              lon: Number(r.lon)
+            })) : [];
+            setCached(searchCache, key, out);
+            return out;
+          } catch { return []; }
+        }
+  
+        function renderSuggestions(container, items, latInput, lonInput, nameInput) {
+          if (!container) return;
+          if (!items || items.length === 0) {
+            container.classList.add('hidden');
+            container.innerHTML = '';
+            return;
+          }
+          container.innerHTML = items.map((it, idx) => `
+            <div class="suggestion-item" data-idx="${idx}">
+              <div class="suggestion-title">${it.name || it.title}</div>
+              <div class="suggestion-sub">${it.lat.toFixed(5)}, ${it.lon.toFixed(5)}</div>
+            </div>`).join('');
+          container.classList.remove('hidden');
+  
+          container.querySelectorAll('.suggestion-item').forEach(item => {
+            item.addEventListener('mousedown', (ev) => {
+              ev.preventDefault();
+              const index = item.dataset.idx;
+              const selected = items[index];
+              const label = selected.name || selected.title;
+              nameInput.value = `${label} (${selected.lat.toFixed(6)}, ${selected.lon.toFixed(6)})`;
+              latInput.value = selected.lat.toFixed(6);
+              lonInput.value = selected.lon.toFixed(6);
+              container.classList.add('hidden');
+              autoSizeInput(nameInput);
+              updateDistanceInfo();
+              nameInput.focus();
+            });
+          });
+        }
+  
+        function debounce(fn, delay) { let t = null; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), delay); }; }
+
+        // Keep text inside the input; set tooltip to show full value
+        function autoSizeInput(inputEl) {
+          inputEl.style.width = '100%';
+          inputEl.title = inputEl.value || '';
+        }
+
+        // Allow typing "lat, lon" directly into the location name fields
+        function tryParseLatLonFromText(text) {
+          const m = text.match(/(-?\d{1,3}(?:\.\d+)?)[\s,]+(-?\d{1,3}(?:\.\d+)?)/);
+          if (!m) return null;
+          const lat = parseFloat(m[1]);
+          const lon = parseFloat(m[2]);
+          if (Number.isFinite(lat) && Number.isFinite(lon)) return { lat, lon };
+          return null;
+        }
+  
+        // --- Main Rendering and Data Management ---
+        function getNextConsignmentId() {
+          const lastId = consignments.reduce((max, c) => {
+            const num = parseInt(c.id.split('-')[1], 10);
+            return num > max ? num : max;
+          }, 0);
+          const nextNum = lastId + 1;
+          return `C-${String(nextNum).padStart(3, '0')}`;
+        }
+  
+        function renderConsignments() {
+          consignmentsTableBody.innerHTML = '';
+          completedTableBody.innerHTML = '';
+  
+          const pendingOrAssigned = consignments.filter(c => ['Pending', 'Assigned', 'In Transit'].includes(c.status));
+          const completed = consignments.filter(c => c.status === 'Delivered' || c.status === 'Cancelled');
+  
+          pendingOrAssigned.forEach(consignment => {
+            const row = createConsignmentRow(consignment);
+            consignmentsTableBody.appendChild(row);
+          });
+  
+          completed.forEach(consignment => {
+            const row = createConsignmentRow(consignment);
+            completedTableBody.appendChild(row);
+          });
+  
+          localStorage.setItem('consignments', JSON.stringify(consignments));
+        }
+  
+        function createConsignmentRow(c) {
+          const tr = document.createElement('tr');
+          tr.setAttribute('data-id', c.id);
+          const eta = calculateETA(c.distanceKm, c.vehicleSpeed);
+          const statusClass = `status-${c.status.toLowerCase().replace(' ', '-')}`;
+  
+          let actionButtons = '';
+          if (c.status !== 'Delivered' && c.status !== 'Cancelled') {
+            const assignIfPending = c.status === 'Pending' ? `<button class="action-btn assign-btn" data-id="${c.id}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 16L12 12L16 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Assign</button>` : '';
+            actionButtons = `
+              ${assignIfPending}
+              <button class="action-btn" data-id="${c.id}" data-action="delivered">Delivered</button>
+              <button class="action-btn delete" data-id="${c.id}" data-action="cancel">Cancel</button>
+            `;
+          }
+  
+          tr.innerHTML = `
+            <td>${c.id}</td>
+            <td>${c.aadhaarNumber}</td>
+            <td>${c.vehicleNumber}</td>
+            <td>${c.crop}</td>
+            <td>${c.farmLocationName}</td>
+            <td>${c.millLocationName}</td>
+            <td>${c.totalTons.toFixed(2)}</td>
+            <td>₹${c.pricePerTon.toFixed(2)}</td>
+            <td>₹${c.totalPrice.toFixed(2)}</td>
+            <td>${c.distanceKm.toFixed(1)}</td>
+            <td>${eta}</td>
+            <td><span class="status-badge ${statusClass}">${c.status}</span></td>
+            <td>
+              <div class="actions">
+                ${actionButtons}
+                <button class="action-btn edit" data-id="${c.id}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 3L21 7L13.75 14.25L9.5 14.5L9.25 10.25L17 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 21H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.25 14.5L9.25 10.25" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Edit</button>
+              </div>
+            </td>
+          `;
+  
+          if (c.status === 'Pending') {
+            const assignBtn = tr.querySelector('.assign-btn');
+            assignBtn.addEventListener('click', () => {
+              const index = consignments.findIndex(item => item.id === c.id);
+              if (index !== -1) {
+                consignments[index].status = 'Assigned';
+                renderConsignments();
+                showMessage('success', `Consignment ${c.id} has been assigned.`);
+              }
+            });
+          }
+          
+          return tr;
+        }
+  
+        // --- Event Listeners and Initial Setup ---
+        newConsignmentBtn.addEventListener('click', () => {
+          consignmentForm.reset();
+          consignmentIdInput.value = '';
+          consignmentForm.scrollIntoView({ behavior: 'smooth' });
+          clearMessage();
+        });
+  
+        consignmentForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+  
+          const id = consignmentIdInput.value || getNextConsignmentId();
+          const aadhaarNumber = document.getElementById('aadhaarNumber').value.trim();
+          const vehicleNumber = document.getElementById('vehicleNumber').value.trim();
+          const crop = document.getElementById('crop').value.trim();
+          const farmLocationName = farmLocationNameInput.value.trim();
+          const millLocationName = millLocationNameInput.value.trim();
+          const beforeTons = parseFloat(beforeDeliveryTonsInput.value);
+          const afterTons = parseFloat(afterDeliveryTonsInput.value);
+          const pricePerTon = parseFloat(pricePerTonInput.value);
+          const vehicleSpeed = parseFloat(document.getElementById('vehicleSpeed').value);
+          const farmLat = parseFloat(farmLatInput.value);
+          const farmLon = parseFloat(farmLonInput.value);
+          const millLat = parseFloat(millLatInput.value);
+          const millLon = parseFloat(millLonInput.value);
+          const status = document.getElementById('status').value;
+  
+          if (beforeTons <= afterTons) {
+              showMessage('error', 'Before delivery weight must be greater than after delivery weight.');
+              return;
+          }
+  
+          const totalTons = beforeTons - afterTons;
+          const totalPrice = totalTons * pricePerTon;
+          const distanceKm = haversineKm(farmLat, farmLon, millLat, millLon);
+  
+          const newConsignment = {
+            id, aadhaarNumber, vehicleNumber, crop, farmLocationName, millLocationName,
+            beforeTons, afterTons, totalTons, pricePerTon, totalPrice,
+            farmLat, farmLon, millLat, millLon, vehicleSpeed, distanceKm, status
+          };
+  
+          const existingIndex = consignments.findIndex(c => c.id === id);
+          if (existingIndex !== -1) {
+            consignments[existingIndex] = newConsignment;
+            showMessage('success', `Consignment ${id} updated successfully.`);
+          } else {
+            consignments.push(newConsignment);
+            showMessage('success', `New consignment ${id} created successfully.`);
+          }
+  
+          renderConsignments();
+          consignmentForm.reset();
+        });
+        
+        beforeDeliveryTonsInput.addEventListener('input', () => {
+          const beforeTons = parseFloat(beforeDeliveryTonsInput.value);
+          const afterTons = parseFloat(afterDeliveryTonsInput.value);
+          if (!isNaN(beforeTons) && !isNaN(afterTons)) {
+            totalTonsInput.value = (beforeTons - afterTons).toFixed(2);
+          } else {
+            totalTonsInput.value = '';
+          }
+        });
+        
+        afterDeliveryTonsInput.addEventListener('input', () => {
+          const beforeTons = parseFloat(beforeDeliveryTonsInput.value);
+          const afterTons = parseFloat(afterDeliveryTonsInput.value);
+          if (!isNaN(beforeTons) && !isNaN(afterTons)) {
+            totalTonsInput.value = (beforeTons - afterTons).toFixed(2);
+          } else {
+            totalTonsInput.value = '';
+          }
+        });
+        
+        pricePerTonInput.addEventListener('input', () => {
+          const totalTons = parseFloat(totalTonsInput.value);
+          const pricePerTon = parseFloat(pricePerTonInput.value);
+          if (!isNaN(totalTons) && !isNaN(pricePerTon)) {
+            totalPriceInput.value = (totalTons * pricePerTon).toFixed(2);
+          } else {
+            totalPriceInput.value = '';
+          }
+        });
+  
+        document.getElementById('consignmentsTable').addEventListener('click', (e) => {
+            const target = e.target.closest('.action-btn');
+            if (!target) return;
+            const id = target.dataset.id;
+            const action = target.dataset.action;
+            const index = consignments.findIndex(c => c.id === id);
+            if (index === -1) return;
+            
+            if (target.classList.contains('edit')) {
+                const c = consignments[index];
+                consignmentIdInput.value = c.id;
+                document.getElementById('aadhaarNumber').value = c.aadhaarNumber;
+                document.getElementById('vehicleNumber').value = c.vehicleNumber;
+                document.getElementById('crop').value = c.crop;
+                document.getElementById('beforeDeliveryTons').value = c.beforeTons;
+                document.getElementById('afterDeliveryTons').value = c.afterTons;
+                totalTonsInput.value = c.totalTons.toFixed(2);
+                document.getElementById('pricePerTon').value = c.pricePerTon;
+                totalPriceInput.value = c.totalPrice.toFixed(2);
+                document.getElementById('vehicleSpeed').value = c.vehicleSpeed;
+                farmLocationNameInput.value = c.farmLocationName;
+                millLocationNameInput.value = c.millLocationName;
+                farmLatInput.value = c.farmLat.toFixed(6);
+                farmLonInput.value = c.farmLon.toFixed(6);
+                millLatInput.value = c.millLat.toFixed(6);
+                millLonInput.value = c.millLon.toFixed(6);
+                document.getElementById('status').value = c.status;
+                consignmentForm.scrollIntoView({ behavior: 'smooth' });
+            } else if (action === 'delivered') {
+                consignments[index].status = 'Delivered';
+                renderConsignments();
+                showMessage('success', `Consignment ${id} marked as Delivered.`);
+                const completedRow = document.querySelector(`#completedTable tbody tr[data-id="${id}"]`);
+                if (completedRow) { completedRow.classList.add('row-flash'); }
+                document.getElementById('completedTable').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else if (action === 'cancel') {
+                consignments[index].status = 'Cancelled';
+                renderConsignments();
+                showMessage('success', `Consignment ${id} marked as Cancelled.`);
+            }
+        });
+        
+        function csvEscape(value) {
+          const str = value == null ? '' : String(value);
+          if (/[",\n]/.test(str)) {
+            return '"' + str.replace(/"/g, '""') + '"';
+          }
+          return str;
+        }
+
+        function toCSV(rows, headers) {
+          const headerLine = headers.join(',');
+          const lines = rows.map(r => headers.map(h => csvEscape(r[h])).join(','));
+          return [headerLine, ...lines].join('\n');
+        }
+
+        function parseCSV(text) {
+          const rows = [];
+          let i = 0, field = '', inQuotes = false, row = [];
+          function endField() { row.push(field); field = ''; }
+          function endRow() { rows.push(row); row = []; }
+          while (i < text.length) {
+            const ch = text[i];
+            if (inQuotes) {
+              if (ch === '"') {
+                if (text[i+1] === '"') { field += '"'; i++; }
+                else { inQuotes = false; }
+              } else { field += ch; }
+            } else {
+              if (ch === '"') { inQuotes = true; }
+              else if (ch === ',') { endField(); }
+              else if (ch === '\n') { endField(); endRow(); }
+              else if (ch === '\r') { /* ignore */ }
+              else { field += ch; }
+            }
+            i++;
+          }
+          // flush last field/row
+          endField();
+          endRow();
+          // remove trailing empty row if present
+          if (rows.length && rows[rows.length-1].length === 1 && rows[rows.length-1][0] === '') rows.pop();
+          return rows;
+        }
+
+        exportConsignmentsBtn.addEventListener('click', () => {
+          const headers = [
+            'id','aadhaarNumber','vehicleNumber','crop','farmLocationName','millLocationName',
+            'beforeTons','afterTons','totalTons','pricePerTon','totalPrice',
+            'farmLat','farmLon','millLat','millLon','vehicleSpeed','distanceKm','status'
+          ];
+          const csv = toCSV(consignments, headers);
+          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `consignments-${Date.now()}.csv`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        });
+  
+        importConsignmentsInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            try {
+              const text = event.target.result;
+              const rows = parseCSV(text);
+              if (!rows || rows.length < 2) throw new Error('No data rows found.');
+              const headers = rows[0];
+              const required = ['id','aadhaarNumber','vehicleNumber','crop','farmLocationName','millLocationName','beforeTons','afterTons','totalTons','pricePerTon','totalPrice','farmLat','farmLon','millLat','millLon','vehicleSpeed','distanceKm','status'];
+              const missing = required.filter(h => !headers.includes(h));
+              if (missing.length) throw new Error('Missing headers: ' + missing.join(', '));
+              const idx = Object.fromEntries(headers.map((h, i) => [h, i]));
+              const parsed = rows.slice(1).filter(r => r.length && r.some(v => v && v.trim() !== '')).map(r => ({
+                id: r[idx.id],
+                aadhaarNumber: r[idx.aadhaarNumber],
+                vehicleNumber: r[idx.vehicleNumber],
+                crop: r[idx.crop],
+                farmLocationName: r[idx.farmLocationName],
+                millLocationName: r[idx.millLocationName],
+                beforeTons: parseFloat(r[idx.beforeTons] || '0'),
+                afterTons: parseFloat(r[idx.afterTons] || '0'),
+                totalTons: parseFloat(r[idx.totalTons] || '0'),
+                pricePerTon: parseFloat(r[idx.pricePerTon] || '0'),
+                totalPrice: parseFloat(r[idx.totalPrice] || '0'),
+                farmLat: parseFloat(r[idx.farmLat] || '0'),
+                farmLon: parseFloat(r[idx.farmLon] || '0'),
+                millLat: parseFloat(r[idx.millLat] || '0'),
+                millLon: parseFloat(r[idx.millLon] || '0'),
+                vehicleSpeed: parseFloat(r[idx.vehicleSpeed] || '0'),
+                distanceKm: parseFloat(r[idx.distanceKm] || '0'),
+                status: r[idx.status] || 'Pending'
+              }));
+              consignments = parsed;
+              renderConsignments();
+              showMessage('success', `Successfully imported ${consignments.length} consignments from CSV.`);
+            } catch (error) {
+              showMessage('error', `Import failed: ${error.message}`);
+            }
+          };
+          reader.readAsText(file);
+        });
+  
+        const doFarmSearch = debounce(async () => {
+          const results = await searchPlaces(farmLocationNameInput.value);
+          renderSuggestions(farmSuggestions, results, farmLatInput, farmLonInput, farmLocationNameInput);
+        }, 200);
+        farmLocationNameInput.addEventListener('input', (e) => {
+          autoSizeInput(farmLocationNameInput);
+          const coords = tryParseLatLonFromText(farmLocationNameInput.value);
+          if (coords) {
+            farmLatInput.value = coords.lat.toFixed(6);
+            farmLonInput.value = coords.lon.toFixed(6);
+            farmSuggestions.classList.add('hidden');
+            updateDistanceInfo();
+          } else {
+            doFarmSearch();
+          }
+        });
+        farmLocationNameInput.addEventListener('blur', () => setTimeout(() => farmSuggestions.classList.add('hidden'), 100));
+        farmLatInput.addEventListener('change', updateDistanceInfo);
+        farmLonInput.addEventListener('change', updateDistanceInfo);
+  
+        const doMillSearch = debounce(() => {
+          const query = millLocationNameInput.value.toLowerCase();
+          const results = millsData.filter(mill => mill.name.toLowerCase().includes(query));
+          renderSuggestions(millSuggestions, results, millLatInput, millLonInput, millLocationNameInput);
+        }, 100);
+        millLocationNameInput.addEventListener('input', (e) => {
+          autoSizeInput(millLocationNameInput);
+          const coords = tryParseLatLonFromText(millLocationNameInput.value);
+          if (coords) {
+            millLatInput.value = coords.lat.toFixed(6);
+            millLonInput.value = coords.lon.toFixed(6);
+            millSuggestions.classList.add('hidden');
+            updateDistanceInfo();
+          } else {
+            doMillSearch();
+          }
+        });
+        millLocationNameInput.addEventListener('blur', () => setTimeout(() => millSuggestions.classList.add('hidden'), 100));
+        millLatInput.addEventListener('change', updateDistanceInfo);
+        millLonInput.addEventListener('change', updateDistanceInfo);
+        document.getElementById('vehicleSpeed').addEventListener('input', updateDistanceInfo);
+
+        // Initial sizing
+        autoSizeInput(farmLocationNameInput);
+        autoSizeInput(millLocationNameInput);
+        
+        renderConsignments();
+      });
+    </script>
+  </body>
+  </html>

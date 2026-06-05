@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Market Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+
+        .navbar {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .navbar h1 {
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        input {
+            padding: 10px;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            background: #3498db;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        .results {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .mill {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .mill:hover {
+            background: #f0f8ff;
+        }
+
+        .details-card {
+            margin-top: 20px;
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+            position: relative;
+            overflow: auto;
+            /* Ensures float is contained */
+        }
+
+        /* Booking button aligned to the right side */
+        .book-btn {
+            background: #27ae60;
+            margin-bottom: 10px;
+            float: right;
+            margin-left: 20px;
+        }
+
+        .book-btn:hover {
+            background: #1e874b;
+        }
+
+        .back-btn {
+            margin-top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <h1>Market Analyzer</h1>
+    </div>
+
+    <div class="container" id="homePage">
+        <h2>Find Mills by Location</h2>
+        <input type="text" id="locationInput" placeholder="Enter location... (e.g. Hyderabad)">
+        <button onclick="showMills()">Search</button>
+    </div>
+
+    <div class="results" id="resultsPage">
+        <h2>Mills in <span id="locationName"></span></h2>
+        <div id="millsList"></div>
+        <div id="millDetails" class="details-card" style="display:none;"></div>
+        <button class="back-btn" onclick="showMills()">⬅ Back</button>
+    </div>
+
+    <script>
+        const millsData = {
+            hyderabad: [{
+                    name: "Hyderabad Premium Rice Mill",
+                    area: "Hyderabad",
+                    pricePerQuintal: "₹3,200",
+                    riceTypes: ["Sona Masoori", "Basmati"],
+                    details: "High quality processing with ISO certification.",
+                    avgRating: 4.5,
+                    reviews: 25
+                },
+                {
+                    name: "Charminar Rice Traders",
+                    area: "Hyderabad",
+                    pricePerQuintal: "₹3,000",
+                    riceTypes: ["Ponni", "Basmati"],
+                    details: "Known for fast delivery and bulk orders.",
+                    avgRating: 4.0,
+                    reviews: 18
+                },
+                {
+                    name: "Golconda Finest Mill",
+                    area: "Hyderabad",
+                    pricePerQuintal: "₹3,150",
+                    riceTypes: ["Sona Masoori", "Ponni"],
+                    details: "Premium packaging and export quality.",
+                    avgRating: 4.4,
+                    reviews: 20
+                },
+                {
+                    name: "Kukatpally Rice Hub",
+                    area: "Hyderabad",
+                    pricePerQuintal: "₹2,950",
+                    riceTypes: ["BPT", "Sona Masoori"],
+                    details: "Budget-friendly bulk orders.",
+                    avgRating: 4.1,
+                    reviews: 16
+                },
+                {
+                    name: "Secunderabad Agro Mill",
+                    area: "Hyderabad",
+                    pricePerQuintal: "₹3,050",
+                    riceTypes: ["Basmati", "Jeera Samba"],
+                    details: "Specialized in aromatic varieties.",
+                    avgRating: 4.3,
+                    reviews: 22
+                },
+                {
+                    name: "Hitech City Grain Works",
+                    area: "Hyderabad",
+                    pricePerQuintal: "₹3,100",
+                    riceTypes: ["Sona Masoori", "Organic Brown"],
+                    details: "Focus on organic processing.",
+                    avgRating: 4.6,
+                    reviews: 30
+                }
+            ],
+            guntur: [{
+                    name: "Guntur Gold Rice Mill",
+                    area: "Guntur",
+                    pricePerQuintal: "₹2,900",
+                    riceTypes: ["Sona Masoori"],
+                    details: "Freshly milled rice with competitive prices.",
+                    avgRating: 4.3,
+                    reviews: 12
+                },
+                {
+                    name: "Amaravati Agro Mill",
+                    area: "Guntur",
+                    pricePerQuintal: "₹3,000",
+                    riceTypes: ["BPT", "Sona Masoori"],
+                    details: "Trusted for large-scale orders.",
+                    avgRating: 4.4,
+                    reviews: 15
+                },
+                {
+                    name: "D.V.G Rice Traders",
+                    area: "Guntur",
+                    pricePerQuintal: "₹2,950",
+                    riceTypes: ["Basmati", "Jeera Samba"],
+                    details: "Known for premium aromatic rice.",
+                    avgRating: 4.2,
+                    reviews: 10
+                },
+                {
+                    name: "Sri Vijayalakshmi Rice Mill",
+                    area: "Guntur",
+                    pricePerQuintal: "₹4,870",
+                    riceTypes: ["Raw rice", "NoN-Basmathi rice"],
+                    details: "Trusted for premium and large-scale orders",
+                    avgRating: 4.3,
+                    reviews: 14
+
+                },
+                {
+                    name: "Vinayaka Rice Industries",
+                    area: "Guntur",
+                    pricePerQuintal: "₹2,400",
+                    riceTypes: ["white rice", "NoN-Basmathi rice"],
+                    details: "mostly small-to-medium local mills for orders",
+                    avgRating: 3.8,
+                    reviews: 12
+
+                },
+                {
+                    name: "Vamsi Krishna local mill",
+                    area: "Guntur",
+                    pricePerQuintal: "₹2,480",
+                    riceTypes: ["white rice", "NoN-Basmathi rice"],
+                    details: "Exports available,small scale producation",
+                    avgRating: 3.8,
+                    reviews: 13
+                }
+
+
+            ],
+            vijayawada: [{
+                    name: "Krishna Rice Mill",
+                    area: "Vijayawada",
+                    pricePerQuintal: "₹3,100",
+                    riceTypes: ["white rice", "Brown rice"],
+                    details: "Exports available, large scale production.",
+                    avgRating: 4.6,
+                    reviews: 20
+                },
+                {
+                    name: "GVS Mills",
+                    area: "Vijayawada",
+                    pricePerQuintal: "₹3,050",
+                    riceTypes: ["Sona Masoori", "Basmati"],
+                    details: "Premium quality and quick delivery.",
+                    avgRating: 4.3,
+                    reviews: 18
+                },
+                {
+                    name: "Kanaka Durga Rice Hub",
+                    area: "Vijayawada",
+                    pricePerQuintal: "₹3,000",
+                    riceTypes: ["Ponni", "Jeera Samba"],
+                    details: "Family-owned with modern equipment.",
+                    avgRating: 4.2,
+                    reviews: 14
+                },
+                {
+                    name: "Hemanth Kumar Rice Mill",
+                    area: "Vijayawada",
+                    pricePerQuintal: "₹3,470",
+                    riceTypes: ["Raw rice , white rice"],
+                    details: "small-scale orders and mill services",
+                    avgRating: 4.0,
+                    reviews: 15
+                },
+                {
+                    name: "Sri Padmalaya Rice Mills",
+                    area: "Vijayawada",
+                    pricePerQuintal: "₹2,000",
+                    riceTypes: ["Branded riceTypes"],
+                    details: "large-scale orders and mill services",
+                    avgRating: 4.2,
+                    reviews: 18
+                },
+                {
+                    name: "Sri Varalakshmi Rice Mills",
+                    area: "Vijayawada",
+                    pricePerQuintal: "₹1,500 - 3,500",
+                    riceTypes: ["white rice, NoN-Basmathi rice"],
+                    details: "local orders and mill services",
+                    avgRating: 3.2,
+                    reviews: 13
+                }
+            ]
+        };
+
+        function showMills() {
+            const location = document.getElementById("locationInput").value.trim().toLowerCase();
+            if (!location) return alert("Please enter a location");
+
+            const mills = millsData[location] || [];
+            document.getElementById("homePage").style.display = "none";
+            document.getElementById("resultsPage").style.display = "block";
+            document.getElementById("locationName").textContent = capitalize(location);
+            document.getElementById("millDetails").style.display = "none";
+
+            const list = document.getElementById("millsList");
+            list.innerHTML = "";
+            if (mills.length === 0) {
+                list.innerHTML = "<p>No mills found for this location.</p>";
+                return;
+            }
+
+            mills.forEach(mill => {
+                const div = document.createElement("div");
+                div.className = "mill";
+                div.textContent = mill.name;
+                div.onclick = () => showDetails(mill);
+                list.appendChild(div);
+            });
+        }
+
+        function showDetails(mill) {
+            const details = document.getElementById("millDetails");
+            details.style.display = "block";
+            details.innerHTML = `
+    <button class="book-btn" onclick="window.location.href='Booking.html'">Book Now</button>
+    <h3>${mill.name}</h3>
+    <p><b>Location:</b> ${mill.area}</p>
+    <p><b>Price:</b> ${mill.pricePerQuintal}</p>
+    <p><b>Rice Types:</b> ${mill.riceTypes.join(", ")}</p>
+    <p><b>Details:</b> ${mill.details}</p>
+    <p><b>Reviews:</b> ⭐ ${mill.avgRating} (${mill.reviews})</p
+  `;
+        }
+
+        // function bookMill(name) {
+        //     alert("Booking request sent for " + name + "!");
+        // }
+
+        function goBack() {
+            document.getElementById("homePage").style.display = "block";
+            document.getElementById("resultsPage").style.display = "none";
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+    </script>
+</body>
+
+</html>

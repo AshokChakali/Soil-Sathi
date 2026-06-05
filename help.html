@@ -1,0 +1,508 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Help & Support Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            text-align: center;
+            min-height: 89vh;
+            background: linear-gradient(135deg, #a8e063, #56ab2f);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(168, 224, 99, 0.6);
+            backdrop-filter: blur(6px);
+        }
+
+        select,
+        input,
+        textarea,
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #43a047;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            background: #2e7d32;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .description-box {
+            margin-top: 20px;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 12px;
+        }
+
+        .desc-header {
+            display: block;
+            padding-bottom: 8px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 id="title">Help & Support</h2>
+
+         Language Selector -->
+        <!-- <label for="language" id="langLabel">Select Language:</label>
+        <select id="language" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="hi">हिंदी (Hindi)</option>
+            <option value="te">తెలుగు (Telugu)</option>
+        </select>
+
+        <h3 id="contactTitle">📞 Contact Support</h3>
+        <p id="contactInfo">Call us at: <strong>+91 9876543210</strong></p>
+
+        <h3 id="smsTitle">💬 Send us a Message</h3>
+        <textarea id="smsBox" placeholder="Type your message here..."></textarea>
+        <button onclick="sendSMS()">Send SMS</button>
+
+        <section id="description">
+            <div class="description-box">
+                <span class="desc-header" id="descHeader">Description</span>
+                <p id="descText">
+                    This help page provides language options, SMS support, and voice message features
+                    so users can easily contact our support team. Click the options above to use the services.
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "Help & Support",
+                langLabel: "Select Language:",
+                contactTitle: "📞 Contact Support",
+                contactInfo: "Call us at: +91 9876543210",
+                smsTitle: "💬 Send us a Message",
+                smsPlaceholder: "Type your message here...",
+                descHeader: "Description",
+                descText: "Farmers wait a long time at mills because old methods are used for scheduling, which wastes time and can spoil crops. They also don’t know which mill gives better prices, so sometimes they get less money for their produce."
+            },
+            hi: {
+                title: "मदद और सहायता",
+                langLabel: "भाषा चुनें:",
+                contactTitle: "📞 सहायता संपर्क",
+                contactInfo: "हमें कॉल करें: +91 9876543210",
+                smsTitle: "💬 हमें संदेश भेजें",
+                smsPlaceholder: "यहां अपना संदेश लिखें...",
+                descHeader: "विवरण",
+                descText: "किसान मिलों में बहुत लंबा समय इंतजार करते हैं क्योंकि पुराने तरीके शेड्यूलिंग के लिए इस्तेमाल होते हैं, जिससे समय बर्बाद होता है और फसल खराब हो सकती है। उन्हें यह भी पता नहीं होता कि कौन सा मिल बेहतर कीमत देता है, इसलिए कभी-कभी उन्हें कम पैसे मिलते हैं।"
+            },
+            te: {
+                title: "సహాయం & మద్దతు",
+                langLabel: "భాషను ఎంచుకోండి:",
+                contactTitle: "📞 మద్దతు సంప్రదించండి",
+                contactInfo: "మాకు కాల్ చేయండి: +91 9876543210",
+                smsTitle: "💬 మాకు సందేశం పంపండి",
+                smsPlaceholder: "ఇక్కడ మీ సందేశాన్ని టైప్ చేయండి...",
+                descHeader: "వివరణ",
+                descText: "రైతులు మిల్ల్స్‌లో ఎక్కువసేపు వేచి ఉంటారు, ఎందుకంటే పాత విధానాలు షెడ్యూలింగ్ కోసం ఉపయోగించబడుతున్నాయి. ఇది సమయాన్ని వృథా చేస్తుంది మరియు పంటలు నాశనం అయ్యే అవకాశం ఉంది. వారు ఏ మిల్ ఎక్కువ ధర ఇస్తుందో తెలుసుకోలేరు, కాబట్టి కొన్నిసార్లు తక్కువ డబ్బు పొందుతారు."
+            }
+        };
+
+        function changeLanguage() {
+            const lang = document.getElementById("language").value;
+            const t = translations[lang];
+
+            document.getElementById("title").innerText = t.title;
+            document.getElementById("langLabel").innerText = t.langLabel;
+            document.getElementById("contactTitle").innerText = t.contactTitle;
+            document.getElementById("contactInfo").innerText = t.contactInfo;
+            document.getElementById("smsTitle").innerText = t.smsTitle;
+            document.getElementById("smsBox").placeholder = t.smsPlaceholder;
+            document.getElementById("descHeader").innerText = t.descHeader;
+            document.getElementById("descText").innerText = t.descText;
+        }
+
+        function sendSMS() {
+            const msg = document.getElementById("smsBox").value;
+            if (msg.trim() === "") {
+                alert("Please type a message before sending.");
+            } else {
+                alert("Your SMS has been sent:\n\n" + msg);
+                document.getElementById("smsBox").value = "";
+            }
+        }
+    </script>
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Help & Support</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f4f8;
+            color: #333;
+        }
+
+        @keyframes fadeInMoveUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.03);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeInMoveUp 0.8s ease-out forwards;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .header h2 {
+            margin: 0;
+            color: #3f51b5;
+        }
+
+        .section {
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .section h3 {
+            color: #5c6bc0;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .section p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin-top: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: #f8f9fa;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #5c6bc0;
+            box-shadow: 0 0 0 3px rgba(92, 107, 192, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: #43a047;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #388e3c;
+            transform: translateY(-2px);
+        }
+
+        #sendButton {
+            animation: pulse 2s infinite;
+        }
+
+        .contact-info-link {
+            display: block;
+            background-color: #e3f2fd;
+            color: #1565c0;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .contact-info-link:hover {
+            background-color: #bbdefb;
+            transform: translateY(-2px);
+        }
+
+        .description-card {
+            background-color: #f0f4f8;
+            border: 1px solid #dcdfe4;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 25px;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out;
+            max-height: 70px; /* Initial collapsed height */
+            position: relative;
+        }
+
+        .description-card.expanded {
+            max-height: 500px; /* Max height when expanded */
+        }
+
+        .desc-header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #5c6bc0;
+        }
+
+        .desc-header-container span {
+            display: flex;
+            align-items: center;
+        }
+        
+        #descContent {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        #toggleDescBtn {
+            background: none;
+            border: none;
+            color: #1e88e5;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+            margin-left: auto;
+        }
+
+        #toggleDescBtn:hover {
+            color: #1565c0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h2 id="title">Help & Support</h2>
+            <p id="subTitle">We're here to help!</p>
+        </div>
+
+        <div class="section">
+            <div class="input-group">
+                <label for="language" id="langLabel">Select Language:</label>
+                <select id="language" onchange="changeLanguage()">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी (Hindi)</option>
+                    <option value="te">తెలుగు (Telugu)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 id="contactTitle">📞 Contact Support</h3>
+            <p id="contactInfo">Call us at: <strong>+91 9876543210</strong></p>
+            <a href="tel:+919876543210" class="contact-info-link">Call Now</a>
+        </div>
+
+        <div class="section">
+            <h3 id="smsTitle">💬 Send us a Message</h3>
+            <div class="input-group">
+                <textarea id="smsBox" placeholder="Type your message here..." rows="4"></textarea>
+            </div>
+            <button id="sendButton" onclick="sendSMS()">Send Message</button>
+        </div>
+
+        <div class="description-card" id="descCard">
+            <div class="desc-header-container" onclick="toggleDescription()">
+                <span id="descHeader">📝 Description</span>
+                <span id="toggleDescBtn">Learn More</span>
+            </div>
+            <div id="descContent">
+                <p id="descText">
+                    This help page provides language options, SMS support, and voice message features so users can easily contact our support team. Click the options above to use the services.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "Help & Support",
+                subTitle: "We're here to help!",
+                langLabel: "Select Language:",
+                contactTitle: "📞 Contact Support",
+                contactInfo: "Call us at: +91 9876543210",
+                smsTitle: "💬 Send us a Message",
+                smsPlaceholder: "Type your message here...",
+                sendButton: "Send Message",
+                descHeader: "📝 Description",
+                toggleDescBtn: "Learn More",
+                descText: "Farmers wait a long time at mills because old methods are used for scheduling, which wastes time and can spoil crops. They also don’t know which mill gives better prices, so sometimes they get less money for their produce."
+            },
+            hi: {
+                title: "मदद और सहायता",
+                subTitle: "हम आपकी मदद के लिए यहां हैं!",
+                langLabel: "भाषा चुनें:",
+                contactTitle: "📞 सहायता संपर्क",
+                contactInfo: "हमें कॉल करें: +91 9876543210",
+                smsTitle: "💬 हमें संदेश भेजें",
+                smsPlaceholder: "यहां अपना संदेश लिखें...",
+                sendButton: "संदेश भेजें",
+                descHeader: "📝 विवरण",
+                toggleDescBtn: "और जानें",
+                descText: "किसान मिलों में बहुत लंबा समय इंतजार करते हैं क्योंकि पुराने तरीके शेड्यूलिंग के लिए इस्तेमाल होते हैं, जिससे समय बर्बाद होता है और फसल खराब हो सकती है। उन्हें यह भी पता नहीं होता कि कौन सा मिल बेहतर कीमत देता है, इसलिए कभी-कभी उन्हें कम पैसे मिलते हैं।"
+            },
+            te: {
+                title: "సహాయం & మద్దతు",
+                subTitle: "మేము మీకు సహాయం చేయడానికి ఇక్కడ ఉన్నాము!",
+                langLabel: "భాషను ఎంచుకోండి:",
+                contactTitle: "📞 మద్దతు సంప్రదించండి",
+                contactInfo: "మాకు కాల్ చేయండి: +91 9876543210",
+                smsTitle: "💬 మాకు సందేశం పంపండి",
+                smsPlaceholder: "ఇక్కడ మీ సందేశాన్ని టైప్ చేయండి...",
+                sendButton: "సందేశాన్ని పంపండి",
+                descHeader: "📝 వివరణ",
+                toggleDescBtn: "మరింత తెలుసుకోండి",
+                descText: "రైతులు మిల్ల్స్‌లో ఎక్కువసేపు వేచి ఉంటారు, ఎందుకంటే పాత విధానాలు షెడ్యూలింగ్ కోసం ఉపయోగించబడుతున్నాయి. ఇది సమయాన్ని వృథా చేస్తుంది మరియు పంటలు నాశనం అయ్యే అవకాశం ఉంది. వారు ఏ మిల్ ఎక్కువ ధర ఇస్తుందో తెలుసుకోలేరు, కాబట్టి కొన్నిసార్లు తక్కువ డబ్బు పొందుతారు."
+            }
+        };
+
+        function changeLanguage() {
+            const lang = document.getElementById("language").value;
+            const t = translations[lang];
+
+            document.getElementById("title").innerText = t.title;
+            document.getElementById("subTitle").innerText = t.subTitle;
+            document.getElementById("langLabel").innerText = t.langLabel;
+            document.getElementById("contactTitle").innerText = t.contactTitle;
+            document.getElementById("contactInfo").innerText = t.contactInfo;
+            document.getElementById("smsTitle").innerText = t.smsTitle;
+            document.getElementById("smsBox").placeholder = t.smsPlaceholder;
+            document.getElementById("sendButton").innerText = t.sendButton;
+            document.getElementById("descHeader").innerText = t.descHeader;
+            document.getElementById("toggleDescBtn").innerText = t.toggleDescBtn;
+            document.getElementById("descText").innerText = t.descText;
+        }
+
+        function sendSMS() {
+            const msg = document.getElementById("smsBox").value;
+            if (msg.trim() === "") {
+                alert("Please type a message before sending.");
+            } else {
+                alert("Your SMS has been sent:\n\n" + msg);
+                document.getElementById("smsBox").value = "";
+            }
+        }
+
+        function toggleDescription() {
+            const descCard = document.getElementById("descCard");
+            const toggleBtn = document.getElementById("toggleDescBtn");
+            if (descCard.classList.contains('expanded')) {
+                descCard.classList.remove('expanded');
+                toggleBtn.innerText = translations[document.getElementById("language").value].toggleDescBtn;
+            } else {
+                descCard.classList.add('expanded');
+                toggleBtn.innerText = "Hide Details";
+            }
+        }
+    </script>
+</body>
+
+</html>

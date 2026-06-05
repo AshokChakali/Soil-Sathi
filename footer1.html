@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm to Mill Logistics</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            --light-green: #e6f4e6;
+            --soft-green: #4CAF50;
+            --light-blue: #e0f7fa;
+            --soft-yellow: #fff9c4;
+            --dark-text: #333;
+            --card-bg: #ffffff;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background: linear-gradient(135deg, var(--light-blue), var(--soft-yellow));
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow-light);
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: var(--soft-green);
+            font-weight: 600;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            color: var(--dark-text);
+            border-bottom: 3px solid var(--light-green);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .section p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .image-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .image-container img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            transition: transform 0.3s ease;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.05);
+        }
+
+        .benefits-list {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .benefits-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .benefits-list li::before {
+            content: '🌿';
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            .section h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <h1>Farm to Mill Logistics</h1>
+    </header>
+
+    <main>
+        <div class="section">
+            <h2>The Challenge: A Broken Supply Chain</h2>
+            <p>
+                Farmers are the backbone of our food system, yet they face significant challenges that hinder their productivity and financial stability. One of the most pressing issues is the inefficiency of the **farm-to-mill supply chain**. Without proper scheduling, farmers spend countless hours—even days—waiting at mills. This idle time is a massive drain on resources, leading to increased fuel costs, wasted labor, and immense personal stress. It's a problem that affects not just the farmer but the entire agricultural ecosystem.
+            </p>
+            <p>
+                Additionally, many farmers rely on traditional knowledge passed down through generations for crop selection and fertilizer use. While this wisdom is valuable, it often lacks the precision of modern agricultural science. This can lead to imbalanced soil nutrients, resulting in **lower crop yields** and, over time, a decline in soil health.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Our Solution: A Smart Digital Platform</h2>
+            <p>
+                We propose a **Smart Digital Platform** designed to solve these fundamental problems. This innovative system aims to create a seamless connection between farmers and mills, revolutionizing how agricultural goods are transported and managed. By providing real-time, accurate mill schedules, our platform allows farmers to plan their trips with precision, eliminating the need for long, unproductive waiting periods.
+            </p>
+            <div class="image-container">
+                <img src="footimg1.png" alt="A farmer using a tablet to check a digital platform.">
+                <img src="footimg2.png" alt="A truck full of grain arriving at a mill on a clear road.">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Key Benefits for Farmers and Mills</h2>
+            <p>Our primary objective is to make the logistics process more efficient, transparent, and profitable for all parties involved. The platform delivers multiple benefits:</p>
+            <ul class="benefits-list">
+                <li>
+                    <h4>Reduced Waiting Time</h4>
+                    <p>Farmers can book a specific time slot for delivery, ensuring a quick and efficient drop-off. This eliminates hours of idle time, freeing them to focus on other farm tasks.</p>
+                </li>
+                <li>
+                    <h4>Cost Savings</h4>
+                    <p>By optimizing travel routes and reducing waiting times, our platform helps farmers save on fuel and labor costs, directly increasing their profit margins.</p>
+                </li>
+                <li>
+                    <h4>Improved Logistics and Planning</h4>
+                    <p>Mills can receive a steady, predictable flow of deliveries, allowing them to manage their operations more effectively and avoid periods of both backlog and inactivity.</p>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+</div>
+
+</body>
+</html>
